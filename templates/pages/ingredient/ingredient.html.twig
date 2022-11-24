@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Cooking . Ingrédients
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		{% if not ingredients.items is same as ([]) %}
+			<h1>
+				Mes ingrédients
+			</h1>
+			<div class="count mt-4">
+				Il y a
+				{{ ingredients.getTotalItemCount }}
+				ingrédients
+			</div>
+			<table class="table table-hover mt-5">
+				<thead>
+					<tr>
+						<th scope="col">Numéro</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Prix</th>
+						<th scope="col">Date de publication</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for ingredient in ingredients %}
+						<tr class="table-default">
+							<th scope="row">{{ ingredient.id }}</th>
+							<td>
+								{{ ingredient.name }}
+							</td>
+							<td>
+								{{ ingredient.price }}
+							</td>
+							<td>
+								{{ ingredient.createdAt|date("d M Y") }}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</tbody>
+		</table>
+
+		<div class="navigation d-flex justify-content-center mt-5">
+			{{ knp_pagination_render(ingredients) }}
+		</div>
+	{% else %}
+		<h4>
+			Il n'y a pas d'ingrédients
+		</h4>
+	{% endif %}
+</div>{% endblock %}

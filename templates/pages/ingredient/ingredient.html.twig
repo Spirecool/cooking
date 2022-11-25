@@ -1,19 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	Cooking . Ingrédients
+	Cooking . Mes ingrédients
 {% endblock %}
 
 {% block body %}
 
 
 	<div class="container">
-		{% if not ingredients.items is same as ([]) %}
+		{# {% if not ingredients.items is same as ([]) %} #}
 			<h1>
 				Mes ingrédients
 			</h1>
-			
-			<a href="{{ path('app_ingredient_new') }}" class="btn btn-primary mt-4">Ajouter un ingrédient</a>		
+
+			<a href="{{ path('app_ingredient_new') }}" class="btn btn-primary mt-4">Ajouter un ingrédient</a>
 
 			{% for message in app.flashes('success') %}
 				<div class="alert alert-success mt-4">
@@ -51,10 +51,10 @@
 								{{ ingredient.createdAt|date("d M Y") }}
 							</td>
 							<td>
-								<a href="{{ path('app_ingredient_edit', { id:ingredient.id  } ) }}" class="btn btn-info">Modifier</a>
+								<a href="{{ path('app_ingredient_edit', { id:ingredient.id } ) }}" class="btn btn-info">Modifier</a>
 							</td>
 							<td>
-								<a href="{{ path('app_ingredient_delete', { id:ingredient.id  } ) }}" class="btn btn-danger">Supprimer</a>
+								<a href="{{ path('app_ingredient_delete', { id:ingredient.id } ) }}" class="btn btn-danger">Supprimer</a>
 							</td>
 						</tr>
 					{% endfor %}
@@ -65,9 +65,9 @@
 		<div class="navigation d-flex justify-content-center mt-5">
 			{{ knp_pagination_render(ingredients) }}
 		</div>
-	{% else %}
+	{# {% else %}
 		<h4>
 			Il n'y a pas d'ingrédients
 		</h4>
-	{% endif %}
+	{% endif %} #}
 </div>{% endblock %}

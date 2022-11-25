@@ -44,7 +44,12 @@ class IngredientController extends AbstractController
             $em->persist($ingredient);
             $em->flush();
 
-            $this->redirectToRoute('app_ingredient');
+            $this->addFlash (
+                'success',
+                'Votre ingrédient a été créé avec succès'
+            );
+
+            return $this->redirectToRoute('app_ingredient');
         }
         return $this->render('pages/ingredient/new.html.twig', [
             'form' => $form->createView()

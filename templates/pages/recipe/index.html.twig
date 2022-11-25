@@ -38,6 +38,7 @@
 						<th scope="col">Nom</th>
 						<th scope="col">Prix</th>
                         <th scope="col">Difficulté</th>
+						<th scope="col">Nombre de personnes</th>
 						<th scope="col">Date de publication</th>
 						<th scope="col">Édition</th>
 						<th scope="col">Suppression</th>
@@ -57,13 +58,16 @@
 								{{ (recipe.difficulty is null) ? 'Non renseigné' : recipe.difficulty  }}
 							</td>
 							<td>
+								{{ (recipe.nbPeople is null) ? 'Non renseigné' : recipe.nbPeople  }}
+							</td>
+							<td>
 								{{ recipe.createdAt|date("d M Y") }}
 							</td>
 							<td>
-								{# <a href="{{ path('app_recipe_edit', { id:recipe.id  } ) }}" class="btn btn-info">Modifier</a> #}
+								<a href="{{ path('app_recipe_edit', { id:recipe.id  } ) }}" class="btn btn-info">Modifier</a>
 							</td>
 							<td>
-								{# <a href="{{ path('app_recipe_delete', { id:recipe.id  } ) }}" class="btn btn-danger">Supprimer</a> #}
+								<a href="{{ path('app_recipe_delete', { id:recipe.id  } ) }}" class="btn btn-danger">Supprimer</a>
 							</td>
 						</tr>
 					{% endfor %}

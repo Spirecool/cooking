@@ -55,4 +55,50 @@ class RecipeController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    #[Route('/recette/edition/{id}', 'app_recipe_edit', methods: ['GET', 'POST'])]
+    public function edit(
+        Recipe $recipe,
+        Request $request,
+        EntityManagerInterface $manager
+    ): Response {
+        $form = $this->createForm(RecipeType::class, $recipe);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $recipe = $form->getData();
+
+            $manager->persist($recipe);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Votre recette a été modifié avec succès !'
+            );
+
+            return $this->redirectToRoute('app_recipe');
+        }
+
+        return $this->render('pages/recipe/edit.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/recette/suppression/{id}', 'app_recipe_delete', methods: ['GET'])]
+    public function delete(
+        EntityManagerInterface $manager,
+        Recipe $recipe
+    ): Response {
+        $manager->remove($recipe);
+        $manager->flush();
+
+        $this->addFlash(
+            'success',
+            'Votre recette a été supprimée avec succès !'
+        );
+
+        return $this->redirectToRoute('app_recipe');
+    }
+
+
 }

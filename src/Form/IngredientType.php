@@ -48,7 +48,7 @@ class IngredientType extends AbstractType
             ])
 
             ->add('submit', SubmitType::class, [
-                'label' => 'Créer mon ingrédient',
+                'label' => 'Valider',
                 'attr' => [
                     'class' => 'btn btn-primary mt-4'
                 ],

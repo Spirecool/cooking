@@ -1,12 +1,12 @@
 {% extends "base.html.twig" %}
 
 {% block title %}
-	Cooking . Nouvel ingrédient
+	Cooking . Modifier l'ingrédient
 {% endblock %}
 
 {% block body %}
 
-	<h1 class="mt-4">Création d'un ingrédient</h1>
+	<h1 class="mt-4">Modifier l'ingrédient</h1>
 
 	{{ form_start(form) }}
 
@@ -30,6 +30,7 @@
 	<div class="form-group mb-4">
 		{{ form_row(form.submit) }}
 	</div>
-    <a href="{{ path('app_ingredient') }}" class="mt-4">Revenir vers la liste</a>		
+	<a href="{{ path('app_ingredient') }}" class="mt-4">Revenir vers la liste</a>
 </div>
-{{ form_end(form) }}{% endblock %}
+{{ form_end(form) }}
+{% endblock %}

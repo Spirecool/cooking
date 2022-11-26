@@ -1,29 +1,56 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">Cooking</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarColor03">
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link active text-light" href="/" >Accueil
-            <span class="visually-hidden">(current)</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-light" href="{{ path('app_ingredient')}}">Mes ingrédients</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-light" href="{{ path('app_recipe')}}">Mes recettes</a>
-        </li>
-      </ul>
-      <form class="d-flex">
-        <input class="form-control me-sm-2" type="text" placeholder="Search">
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-      </form>
-    </div>
-  </div>
+	<div class="container-fluid">
+		<a class="navbar-brand" href="/">Cooking</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarColor03">
+			<ul class="navbar-nav me-auto">
+				<li class="nav-item">
+					<a class="nav-link active text-light" href="/">Accueil
+						<span class="visually-hidden">(current)</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link text-light" href="{{ path('app_ingredient')}}">Mes ingrédients</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link text-light" href="{{ path('app_recipe')}}">Mes recettes</a>
+				</li>
+			</ul>
+      
+			<div class="d-flex">
+				<ul class="navbar-nav me-auto">
+					{% if app.user %}
+						<li class="nav-item dropdown" style="margin-right: 5rem;">
+							<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{ app.user.fullName }}</a>
+							<div class="dropdown-menu">
+								<a class="dropdown-item" href="#">Modifier mes informations</a>
+								<a class="dropdown-item" href="#">Modifier mon mot de passe</a>
+								<div class="dropdown-divider"></div>
+								{% if 'ROLE_ADMIN' in app.user.roles %}
+									<a class="dropdown-item" href="#">Administration</a>
+									<div class="dropdown-divider"></div>
+								{% endif %}
+								<a class="dropdown-item" href="{{ path('app_security_logout') }}">Déconnexion</a>
+							</div>
+						</li>
+					{% else %}
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_security_login') }}">Connexion
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">Inscription
+							</a>
+						</li>
+					{% endif %}
+				</ul>
+			</div>
+
+
+		</div>
+	</div>
 </nav>
 
 <!-- JavaScript Bundle with Popper -->

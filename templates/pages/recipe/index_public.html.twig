@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Cooking . Mes recettes
+{% endblock %}
+
+{% block body %}
+
+
+	<div class="container">
+		{% if not recipes.items is same as ([]) %}
+			<h1 class="mb-5">
+				Recettes de la Communauté Cooking
+			</h1>
+			<div class="d-flex justify-content-center flex-wrap ">
+				{% for recipe in recipes %}
+					<div class="card border-secondary mb-3 mx-2 " style="max-width: 20rem;">
+						<div class="card-header">recette n° {{ recipe.id }}</div>
+						<div class="card-body">
+							<h4 class="card-title">{{ recipe.name }}</h4>
+							<p class="card-text">{{ recipe.description|slice(0,100) ~ '...' }}</p>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+
+		{% else %}
+			<h4>
+				Il n'y a pas de recettes
+			</h4>
+		{% endif %}
+
+	</div>
+{% endblock %}

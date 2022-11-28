@@ -10,7 +10,7 @@
 			</div>
 	{% endfor %}
 
-	<h1 class="mt-4">{{ recipe.name }}</h1>
+	<h1 class="mt-4">{{ recipe.name|capitalize  }}</h1>
 {# 
 	<div class="recipe__image">
 		<img style="max-width: 500px;" src="{{ vich_uploader_asset(recipe, 'imageFile') }}">
@@ -73,9 +73,9 @@
         {% endfor %}
     </div>
 
-    {# <div class="mark">
+    <div class="mark">
         {{ form(form) }}
-    </div> #}
+    </div>
 
     </div>
 

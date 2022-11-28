@@ -33,6 +33,14 @@ class RecipeController extends AbstractController
         ]);
     }
 
+    #[Route('/recette/{id}', name: 'app_recipe_show', methods: ['GET'])]
+    public function show(Recipe $recipe) : Response
+    {
+        return $this->render('pages/recipe/show.html.twig', [
+            'recipe' => $recipe,
+        ]);
+    }
+
     #[IsGranted('ROLE_USER')]
     #[Route('/recette/creation', name: 'app_recipe_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $manager): Response

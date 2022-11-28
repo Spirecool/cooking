@@ -3,39 +3,41 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\UserPasswordType;
 use App\Form\UserType;
+use App\Form\UserPasswordType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
 {
+    #[Security("is_granted('ROLE_USER') and user === choosenUser")]
     #[Route('/utilisateur/edition/{id}', name: 'app_user_edit')]
-    public function edit(User $user, Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher): Response
+    public function edit(User $choosenUser, Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher): Response
     {
-        // Vérifie que l'utilisateur est bien connecté, sinon cela le redigrige vers la page de login
-        if(!$this->getUser()) {
-            return $this->redirectToRoute('app_security_login');
-        }
+        // // Vérifie que l'utilisateur est bien connecté, sinon cela le redigrige vers la page de login
+        // if(!$this->getUser()) {
+        //     return $this->redirectToRoute('app_security_login');
+        // }
 
-        // Vérifie si l'utilisateur courant est le même que celui récupéré dans l'id de la ligne 12 sinon on renvoie sur l'index des recettes
-        if($this->getUser() !== $user) {
-            return $this->redirectToRoute('app_recipe');
-        }
+        // // Vérifie si l'utilisateur courant est le même que celui récupéré dans l'id de la ligne 12 sinon on renvoie sur l'index des recettes
+        // if($this->getUser() !== $user) {
+        //     return $this->redirectToRoute('app_recipe');
+        // }
 
         // On créé le formulaire
-        $form = $this->createForm(UserType::class, $user );
+        $form = $this->createForm(UserType::class, $choosenUser );
 
         //on gère le submit
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
 
             // si le mdp renseigné est le même mdp que celui renseigné en bdd alors on autorise
-            if($hasher->isPasswordValid($user, $form->getData()->getPlainPassword() )){
+            if($hasher->isPasswordValid($choosenUser, $form->getData()->getPlainPassword() )){
                 $user = $form->getData();
                 $manager->persist($user);
                 $manager->flush();
@@ -61,9 +63,10 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[Security("is_granted('ROLE_USER') and user === choosenUser")]
     #[Route('/utilisateur/edition-mot-de-passe/{id}', 'app_user_edit_password', methods: ['GET', 'POST'])] 
     public function editPassword(
-        User $user,
+        User $choosenUser,
         Request $request,
         EntityManagerInterface $manager,
         UserPasswordHasherInterface $hasher
@@ -72,16 +75,16 @@ class UserController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($hasher->isPasswordValid($user, $form->getData()['plainPassword'])) {
+            if ($hasher->isPasswordValid($choosenUser, $form->getData()['plainPassword'])) {
 
-                $user->setPassword(
+                $choosenUser->setPassword(
                     $hasher->hashPassword(
-                        $user, 
+                        $choosenUser, 
                         $form->getData()['newPassword']
                     )
                 );
 
-                $manager->persist($user);
+                $manager->persist($choosenUser);
                 $manager->flush();
 
                 $this->addFlash(

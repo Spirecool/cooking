@@ -53,7 +53,37 @@ class RecipeController extends AbstractController
     }
 
 
-    #[Security("is_granted('ROLE_USER') and (recipe.isIsPublic() === true)")]
+    #[IsGranted('ROLE_USER')]
+    #[Route('/recette/creation', name: 'app_recipe_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $manager): Response
+    {
+        $recipe = new Recipe();
+        $form = $this->createForm(RecipeType::class, $recipe);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+ 
+            $recipe = $form->getData();
+            $recipe->setUser($this->getUser());
+        
+            $manager->persist($recipe);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Votre recette a été créé avec succès !'
+            );
+
+
+            return $this->redirectToRoute('app_recipe');       
+        }
+
+        return $this->render('pages/recipe/new.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Security("is_granted('ROLE_USER') and (recipe.isIsPublic() === true || user === recipe.getUser())")]
     #[Route('/recette/{id}', name: 'app_recipe_show', methods: ['GET' , 'POST'])]
     public function show(Recipe $recipe, Request $request, MarkRepository $markRepository, EntityManagerInterface $manager) : Response
     {
@@ -95,35 +125,7 @@ class RecipeController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_USER')]
-    #[Route('/recette/creation', name: 'app_recipe_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $manager): Response
-    {
-        $recipe = new Recipe();
-        $form = $this->createForm(RecipeType::class, $recipe);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
- 
-            $recipe = $form->getData();
-            $recipe->setUser($this->getUser());
-        
-            $manager->persist($recipe);
-            $manager->flush();
-
-            $this->addFlash(
-                'success',
-                'Votre recette a été créé avec succès !'
-            );
-
-
-            return $this->redirectToRoute('app_recipe');       
-        }
-
-        return $this->render('pages/recipe/new.html.twig', [
-            'form' => $form->createView()
-        ]);
-    }
+    
 
     // L'utilisateur ne peut modifier que ses recettes, pas celles des autres utilisateurs
     #[Security("is_granted('ROLE_USER') and user === recipe.getUser()")]

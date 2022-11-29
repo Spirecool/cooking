@@ -39,7 +39,7 @@ class RecipeController extends AbstractController
 
     
     // Page listant toutes les recettes
-    #[Route('/recette/publique', name: 'app_recipe_index_public', methods: ['GET'])]
+    #[Route('/recette/communaute', name: 'app_recipe_community', methods: ['GET'])]
     public function indexPublic(PaginatorInterface $paginator, RecipeRepository $repository, Request $request) : Response
     {
         $recipes = $paginator->paginate(
@@ -47,7 +47,7 @@ class RecipeController extends AbstractController
             $request->query->getInt('page', 1),
             10
         );
-        return $this->render('pages/recipe/index_public.html.twig', [
+        return $this->render('pages/recipe/community.html.twig', [
             'recipes' => $recipes
         ]);
     }
@@ -62,7 +62,6 @@ class RecipeController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
- 
             $recipe = $form->getData();
             $recipe->setUser($this->getUser());
         
@@ -73,7 +72,6 @@ class RecipeController extends AbstractController
                 'success',
                 'Votre recette a été créé avec succès !'
             );
-
 
             return $this->redirectToRoute('app_recipe');       
         }
@@ -99,7 +97,6 @@ class RecipeController extends AbstractController
                 'user' => $this->getUser(),
                 'recipe' => $recipe
             ]);
- 
             if (!$existingMark) {
                 $manager->persist($mark);
             } else {
@@ -116,7 +113,6 @@ class RecipeController extends AbstractController
             );
 
             return $this->redirectToRoute('app_recipe_show', ['id' => $recipe->getId()]);
-
         }
 
         return $this->render('pages/recipe/show.html.twig', [
@@ -158,6 +154,7 @@ class RecipeController extends AbstractController
     }
 
     #[Route('/recette/suppression/{id}', 'app_recipe_delete', methods: ['GET'])]
+    #[Security("is_granted('ROLE_USER') and user === recipe.getUser()")]
     public function delete(
         EntityManagerInterface $manager,
         Recipe $recipe

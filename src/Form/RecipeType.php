@@ -148,14 +148,17 @@ class RecipeType extends AbstractType
 
             ->add('ingredients', EntityType::class, [
                 'class' => Ingredient::class,
-                'choice_label' => 'name',
-                'label' => 'Les ingrédients',
                 'query_builder' => function (IngredientRepository $r) {
                     return $r->createQueryBuilder('i')
                         ->where('i.user = :user')
                         ->orderBy('i.name', 'ASC')
                         ->setParameter('user', $this->token->getToken()->getUser());
                 },
+                'label' => 'Les ingrédients',
+                'label_attr' => [
+                    'class' => 'form-label mt-4'
+                ],
+                'choice_label' => 'name',
                 'multiple' => 'true',
                 'expanded' => 'true'
 

@@ -1,0 +1,17 @@
+.ingredients-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.form-image img {
+    width: 400px;
+    margin-top: 30px;
+}
+
+body {
+    flex-direction: column;
+    display: flex;
+    min-height: 100vh;
+    justify-content: space-between;
+  }
+  
